@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descubre el Humanismo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://i.imgur.com/I7VteY4.png') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background: #e0e0e0;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .hidden {
+            display: none;
+        }
+        .correct {
+            background: #33cc33 !important;
+            color: white;
+        }
+        .incorrect {
+            background: #cc3333 !important;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Descubre el Humanismo</h1>
+        <p>Haz clic en cada tarjeta para revelar su contenido y selecciona la categoría correcta.</p>
+        <div class="grid" id="gameBoard"></div>
+        <p id="result"></p>
+    </div>
+    <script>
+        const cards = [
+            { img: "https://i.imgur.com/6LOSsbt.jpeg", text: "El ser humano como centro del pensamiento", category: "Características" },
+            { img: "https://i.imgur.com/keIXx3i.jpeg", text: "Estudio de los textos clásicos grecolatinos", category: "Características" },
+            { img: "https://i.imgur.com/4nZ1dZF.jpeg", text: "Defensa del individualismo y la razón", category: "Características" },
+            { img: "", text: "Maquiavelo y su obra 'El Príncipe'", category: "Literaria y filosófica" },
+            { img: "https://i.imgur.com/FGSsjyH.jpeg", text: "Erasmo de Rotterdam y el humanismo cristiano", category: "Religiosa" },
+            { img: "https://i.imgur.com/ooXspTz.jpeg", text: "Copérnico y la teoría heliocéntrica", category: "Científica" },
+            { img: "https://i.imgur.com/kjcEJON.jpeg", text: "Paracelso y los avances en medicina", category: "Científica" },
+            { img: "https://i.imgur.com/89eyjkk.jpeg", text: "La imprenta de Gutenberg y la difusión del conocimiento", category: "Expansión" },
+            { img: "https://i.imgur.com/qvP1XDA.jpeg", text: "Fundación de academias y centros de estudio", category: "Expansión" }
+        ];
+
+        function loadGame() {
+            const gameBoard = document.getElementById("gameBoard");
+            gameBoard.innerHTML = "";
+            
+            cards.forEach((card, index) => {
+                let cardDiv = document.createElement("div");
+                cardDiv.classList.add("card");
+                cardDiv.innerHTML = `<img src="${card.img}" width="100%"><p class="hidden">${card.text}</p>
+                                     <select class="hidden">
+                                        <option value="">Selecciona una categoría</option>
+                                        <option value="Características">Características</option>
+                                        <option value="Literaria y filosófica">Literaria y filosófica</option>
+                                        <option value="Religiosa">Religiosa</option>
+                                        <option value="Científica">Científica</option>
+                                        <option value="Expansión">Expansión</option>
+                                     </select>`;
+                cardDiv.onclick = function() { revealCard(cardDiv, index); };
+                gameBoard.appendChild(cardDiv);
+            });
+        }
+
+        function revealCard(cardDiv, index) {
+            let text = cardDiv.querySelector("p");
+            let select = cardDiv.querySelector("select");
+            text.classList.remove("hidden");
+            select.classList.remove("hidden");
+            select.onchange = function() { checkAnswer(select, index, cardDiv); };
+        }
+
+        function checkAnswer(select, index, cardDiv) {
+            if (select.value === cards[index].category) {
+                cardDiv.classList.add("correct");
+            } else {
+                cardDiv.classList.add("incorrect");
+            }
+            select.disabled = true;
+        }
+
+        loadGame();
+    </script>
+</body>
+</html>
